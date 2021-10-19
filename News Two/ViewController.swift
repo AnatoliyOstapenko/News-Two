@@ -6,13 +6,14 @@
 //
 
 import UIKit
+import SafariServices
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
     // create array
     private var viewModels = [NewsTableViewCellViewModel]()
-    
+    private var articles = [Articles]()
     
     
     // create UITableView
@@ -42,6 +43,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             
             switch result {
             case .success(let articles):
+                self?.articles = articles
                 self?.viewModels = articles.compactMap({
                     NewsTableViewCellViewModel(title: $0.title, subtitle: $0.description ?? "no description", imageURL: URL(string: $0.urlToImage ?? "no image"), imageData: nil)
                 })
@@ -83,6 +85,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // it has to be further explored
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        //action should be when user taps on a row
+        let article = articles[indexPath.row]
+        
+        guard let url = URL(string: article.url ?? "") else { return }
+        let vc = SFSafariViewController(url: url)
+        present(vc, animated: true)
     }
     
     // height for row

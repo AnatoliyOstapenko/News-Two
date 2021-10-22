@@ -6,6 +6,7 @@
 //
 
 import UIKit
+// it's needed to interact with Safari (link by url)
 import SafariServices
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -36,9 +37,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         
-        // let's chek it other time:
-        //view.backgroundColor = .systemBackground
-        
         NewsManager.shared.getTopStories { [weak self] result in
             
             switch result {
@@ -67,7 +65,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     
     
-    // TableView
+    // MARK:- TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModels.count
@@ -82,13 +80,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return cell
     }
     
-    // it has to be further explored
+    // action should be when user taps on a row
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        //action should be when user taps on a row
         let article = articles[indexPath.row]
         
+        // open Safari by url link
         guard let url = URL(string: article.url ?? "") else { return }
         let vc = SFSafariViewController(url: url)
         present(vc, animated: true)

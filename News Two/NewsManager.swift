@@ -31,7 +31,6 @@ final class NewsManager {
                 
                 let result = try JSONDecoder().decode(APIResponse.self, from: data)
                 
-                print(result.articles.count)
                 completion(.success(result.articles))
                 
             } catch { print(error) }
